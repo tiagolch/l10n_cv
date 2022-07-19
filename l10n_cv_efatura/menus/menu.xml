@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="menu_l10n_cv_efatura_root"
+              name="e-Fatura"
+              sequence="10"/>
+
+    <menuitem id="menu_l10n_cv_efatura_configurations"
+              name="Configuration"
+              parent="menu_l10n_cv_efatura_root"
+              sequence="4"/>
+
+    <menuitem id="menu_l10n_cv_efatura_settings"
+              name="Settings"
+              parent="menu_l10n_cv_efatura_configurations"
+              action="action_efatura_cv_settings"
+              sequence="0"/>
+
+    <menuitem id="menu_l10n_cv_efatura_parameterization"
+              name="Parameterizações"
+              parent="menu_l10n_cv_efatura_configurations"
+              sequence="1"/>
+
+    <menuitem id="menu_l10n_cv_efatura_event_type_code"
+              name="Código do Tipo de Evento"
+              parent="menu_l10n_cv_efatura_parameterization"
+              action="action_l10n_cv_efatura_event_type_code"
+              sequence="0"/>
+
+    <menuitem id="menu_l10n_cv_efatura_document_type"
+              name="Tipo de Documento"
+              parent="menu_l10n_cv_efatura_parameterization"
+              action="action_l10n_cv_efatura_document_type"
+              sequence="1"/>
+
+    <menuitem id="menu_l10n_cv_efatura_product_line_type"
+              name="Tipo de Linha Produto"
+              parent="menu_l10n_cv_efatura_parameterization"
+              action="action_l10n_cv_efatura_product_line_type"
+              sequence="2"/>
+
+    <menuitem id="menu_l10n_cv_efatura_repository"
+              name="Repositórios"
+              parent="menu_l10n_cv_efatura_parameterization"
+              action="action_l10n_cv_efatura_repository"
+              sequence="3"/>
+
+    <menuitem id="menu_l10n_cv_efatura_unidade"
+              name="Unidades"
+              parent="menu_l10n_cv_efatura_parameterization"
+              action="action_l10n_cv_efatura_unidade"
+              sequence="4"/>
+
+    <menuitem id="menu_l10n_cv_transmission_issue_mode"
+              name="Modo de Transmissão"
+              parent="menu_l10n_cv_efatura_parameterization"
+              action="action_l10n_cv_efatura_transmission_issue_mode"
+              sequence="5"/>
+
+    <menuitem id="menu_l10n_cv_reason_type_code"
+              name="Reason Type Code"
+              parent="menu_l10n_cv_efatura_parameterization"
+              action="action_l10n_cv_efatura_reason_type_code"
+              sequence="6"/>
+
+    <menuitem id="menu_l10n_cv_issue_reason_code"
+              name="Issue Reason Code"
+              parent="menu_l10n_cv_efatura_parameterization"
+              action="action_l10n_cv_efatura_issue_reason_code"
+              sequence="7"/>
+
+    <menuitem id="menu_l10n_cv_receipt_type_code"
+              name="Tipo de Recibo"
+              parent="menu_l10n_cv_efatura_parameterization"
+              action="action_l10n_cv_efatura_receipt_type_code"
+              sequence="8"/>
+
+</odoo>

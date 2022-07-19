@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <template id="report_payment_receipt_document_inherit" inherit_id="account.report_payment_receipt_document">
+
+        <xpath expr="//table[@class='table table-sm']" position="after">
+            <div t-attf-class="col-12" t-if="o.move_id.l10n_cv_efatura_is_einvoice != False">
+                <div style="background-color:#FFF;text-align: center;margin-top: 20px;margin-bottom: 50px;">
+                    <t t-esc="o.move_id.generate_qr_code()"/>
+                    <img t-att-src="image_data_uri(o.move_id.l10n_cv_efatura_qr_code)" style="max-height: 150px;" alt="QR Code"/>
+                    <p><strong style="font-size: 12px;" t-field="o.move_id.l10n_cv_efatura_iud"/></p>
+                </div>
+            </div>
+        </xpath>
+
+    </template>
+</odoo>

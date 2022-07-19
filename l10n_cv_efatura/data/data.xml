@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<!-- Tipo de Documento  -->
+		<record id="l10n_cv_efatura.domain_01" model="l10n_cv_efatura.domain">
+			<field name="code">1</field>
+			<field name="name">(FTE) Fatura Eletrónica</field>
+			<field name="domain">DOCUMENT_TYPE</field>
+		</record>
+		<record id="l10n_cv_efatura.domain_02" model="l10n_cv_efatura.domain">
+			<field name="code">2</field>
+			<field name="name">(FRE) Fatura-Recibo Eletrónica</field>
+			<field name="domain">DOCUMENT_TYPE</field>
+		</record>
+		<record id="l10n_cv_efatura.domain_03" model="l10n_cv_efatura.domain">
+			<field name="code">3</field>
+			<field name="name">(TVE) Talão de Venda Eletrónico</field>
+			<field name="domain">DOCUMENT_TYPE</field>
+		</record>
+		<record id="l10n_cv_efatura.domain_04" model="l10n_cv_efatura.domain">
+			<field name="code">4</field>
+			<field name="name">(RCE) Recibo Eletrónico</field>
+			<field name="domain">DOCUMENT_TYPE</field>
+		</record>
+		<record id="l10n_cv_efatura.domain_05" model="l10n_cv_efatura.domain">
+			<field name="code">5</field>
+			<field name="name">(NCE) Nota de Crédito Eletrónica</field>
+			<field name="domain">DOCUMENT_TYPE</field>
+		</record>
+		<record id="l10n_cv_efatura.domain_06" model="l10n_cv_efatura.domain">
+			<field name="code">6</field>
+			<field name="name">(NDE) Nota de Débito Eletrónica</field>
+			<field name="domain">DOCUMENT_TYPE</field>
+		</record>
+		<record id="l10n_cv_efatura.domain_07" model="l10n_cv_efatura.domain">
+			<field name="code">7</field>
+			<field name="name">(DTE) Documento de Transporte Eletrónico</field>
+			<field name="domain">DOCUMENT_TYPE</field>
+		</record>
+		<record id="l10n_cv_efatura.domain_08" model="l10n_cv_efatura.domain">
+			<field name="code">8</field>
+			<field name="name">(DVE) Nota de Devolução Eletrónica</field>
+			<field name="domain">DOCUMENT_TYPE</field>
+		</record>
+		<record id="l10n_cv_efatura.domain_09" model="l10n_cv_efatura.domain">
+			<field name="code">9</field>
+			<field name="name">(NLE) Nota de Lançamento Eletrónica</field>
+			<field name="domain">DOCUMENT_TYPE</field>
+		</record>
+		<!-- Repositório  -->
+		<record id="l10n_cv_efatura.domain_10" model="l10n_cv_efatura.domain">
+			<field name="code">1</field>
+			<field name="name">Principal</field>
+			<field name="domain">REPOSITORY</field>
+		</record>
+		<record id="l10n_cv_efatura.domain_11" model="l10n_cv_efatura.domain">
+			<field name="code">2</field>
+			<field name="name">Homologação</field>
+			<field name="domain">REPOSITORY</field>
+		</record>
+		<record id="l10n_cv_efatura.domain_12" model="l10n_cv_efatura.domain">
+			<field name="code">3</field>
+			<field name="name">Teste</field>
+			<field name="domain">REPOSITORY</field>
+		</record>
+		<!-- Tipo de Linhas de Produtos/Serviços  -->
+		<record id="l10n_cv_efatura.domain_13" model="l10n_cv_efatura.domain">
+			<field name="code">N</field>
+			<field name="name">Normal</field>
+			<field name="domain">PRODUCT_LINE_TYPE</field>
+		</record>
+		<record id="l10n_cv_efatura.domain_14" model="l10n_cv_efatura.domain">
+			<field name="code">C</field>
+			<field name="name">Charge</field>
+			<field name="domain">PRODUCT_LINE_TYPE</field>
+		</record>
+		<record id="l10n_cv_efatura.domain_15" model="l10n_cv_efatura.domain">
+			<field name="code">D</field>
+			<field name="name">Deduction</field>
+			<field name="domain">PRODUCT_LINE_TYPE</field>
+		</record>
+		<record id="l10n_cv_efatura.domain_16" model="l10n_cv_efatura.domain">
+			<field name="code">I</field>
+			<field name="name">Information</field>
+			<field name="domain">PRODUCT_LINE_TYPE</field>
+		</record>
+		<!-- Event Type Code-->
+		<record id="l10n_cv_efatura.domain_17" model="l10n_cv_efatura.domain">
+			<field name="code">FDC</field>
+			<field name="name">Cancelamento/Anulação de DFE</field>
+			<field name="domain">EVENT_TYPE_CODE</field>
+		</record>
+		<record id="l10n_cv_efatura.domain_18" model="l10n_cv_efatura.domain">
+			<field name="code">UDN</field>
+			<field name="name">Inutilização de Número de Documento</field>
+			<field name="domain">EVENT_TYPE_CODE</field>
+		</record>
+
+		<!-- Unidade -->
+		<record id="l10n_cv_efatura.domain_19" model="l10n_cv_efatura.domain">
+			<field name="code">KGM</field>
+			<field name="name">Kilograma</field>
+			<field name="domain">UNIDADE</field>
+		</record>
+		<record id="l10n_cv_efatura.domain_20" model="l10n_cv_efatura.domain">
+			<field name="code">MTR</field>
+			<field name="name">Metro</field>
+			<field name="domain">UNIDADE</field>
+		</record>
+		<record id="l10n_cv_efatura.domain_21" model="l10n_cv_efatura.domain">
+			<field name="code">LTR</field>
+			<field name="name">Litro</field>
+			<field name="domain">UNIDADE</field>
+		</record>
+		<record id="l10n_cv_efatura.domain_22" model="l10n_cv_efatura.domain">
+			<field name="code">MTQ</field>
+			<field name="name">Métro Cúbico</field>
+			<field name="domain">UNIDADE</field>
+		</record>
+		<record id="l10n_cv_efatura.domain_23" model="l10n_cv_efatura.domain">
+			<field name="code">MTK</field>
+			<field name="name">Métro Quadrado</field>
+			<field name="domain">UNIDADE</field>
+		</record>
+		<record id="l10n_cv_efatura.domain_24" model="l10n_cv_efatura.domain">
+			<field name="code">KWH</field>
+			<field name="name">Quilowatt/Hora</field>
+			<field name="domain">UNIDADE</field>
+		</record>
+		<record id="l10n_cv_efatura.domain_25" model="l10n_cv_efatura.domain">
+			<field name="code">CELL</field>
+			<field name="name">Graus Célcios</field>
+			<field name="domain">UNIDADE</field>
+		</record>
+		<record id="l10n_cv_efatura.domain_26" model="l10n_cv_efatura.domain">
+			<field name="code">EA</field>
+			<field name="name">Unidade/Cada</field>
+			<field name="domain">UNIDADE</field>
+		</record>
+		<record id="l10n_cv_efatura.domain_27" model="l10n_cv_efatura.domain">
+			<field name="code">A99</field>
+			<field name="name">Bit</field>
+			<field name="domain">UNIDADE</field>
+		</record>
+		<record id="l10n_cv_efatura.domain_28" model="l10n_cv_efatura.domain">
+			<field name="code">AD</field>
+			<field name="name">Byte</field>
+			<field name="domain">UNIDADE</field>
+		</record>
+		<record id="l10n_cv_efatura.domain_29" model="l10n_cv_efatura.domain">
+			<field name="code">2P</field>
+			<field name="name">Quilobyte</field>
+			<field name="domain">UNIDADE</field>
+		</record>
+		<record id="l10n_cv_efatura.domain_30" model="l10n_cv_efatura.domain">
+			<field name="code">4L</field>
+			<field name="name">Megabyte</field>
+			<field name="domain">UNIDADE</field>
+		</record>
+		<record id="l10n_cv_efatura.domain_31" model="l10n_cv_efatura.domain">
+			<field name="code">E34</field>
+			<field name="name">Gigabyte</field>
+			<field name="domain">UNIDADE</field>
+		</record>
+		<record id="l10n_cv_efatura.domain_32" model="l10n_cv_efatura.domain">
+			<field name="code">E35</field>
+			<field name="name">Terrabyte</field>
+			<field name="domain">UNIDADE</field>
+		</record>
+		<record id="l10n_cv_efatura.domain_33" model="l10n_cv_efatura.domain">
+			<field name="code">B10</field>
+			<field name="name">Bits/Segundo</field>
+			<field name="domain">UNIDADE</field>
+		</record>
+		<record id="l10n_cv_efatura.domain_34" model="l10n_cv_efatura.domain">
+			<field name="code">C74</field>
+			<field name="name">Quilobits/Segundo</field>
+			<field name="domain">UNIDADE</field>
+		</record>
+		<record id="l10n_cv_efatura.domain_35" model="l10n_cv_efatura.domain">
+			<field name="code">E20</field>
+			<field name="name">Megabits/Segundo</field>
+			<field name="domain">UNIDADE</field>
+		</record>
+		<record id="l10n_cv_efatura.domain_36" model="l10n_cv_efatura.domain">
+			<field name="code">B80</field>
+			<field name="name">Gigabits/Segundo</field>
+			<field name="domain">UNIDADE</field>
+		</record>
+
+		<!-- Transmission IssueMode -->
+		<record id="l10n_cv_efatura.domain_37" model="l10n_cv_efatura.domain">
+			<field name="code">1</field>
+			<field name="name">Online</field>
+			<field name="domain">TRANSMISSION_ISSUE_MODE</field>
+		</record>
+		<record id="l10n_cv_efatura.domain_38" model="l10n_cv_efatura.domain">
+			<field name="code">2</field>
+			<field name="name">Offline</field>
+			<field name="domain">TRANSMISSION_ISSUE_MODE</field>
+		</record>
+
+		<!-- Reason Type Code -->
+		<record id="l10n_cv_efatura.domain_39" model="l10n_cv_efatura.domain">
+			<field name="code">1</field>
+			<field name="name">Indisponibilidade do serviço de autorização de DFEs</field>
+			<field name="domain">REASON_TYPE_CODE</field>
+		</record>
+		<record id="l10n_cv_efatura.domain_40" model="l10n_cv_efatura.domain">
+			<field name="code">2</field>
+			<field name="name">Falta de energia elétrica no estabelecimento do contribuinte</field>
+			<field name="domain">REASON_TYPE_CODE</field>
+		</record>
+		<record id="l10n_cv_efatura.domain_41" model="l10n_cv_efatura.domain">
+			<field name="code">3</field>
+			<field name="name">Indisponibilidade do sistema do contribuinte</field>
+			<field name="domain">REASON_TYPE_CODE</field>
+		</record>
+		<record id="l10n_cv_efatura.domain_42" model="l10n_cv_efatura.domain">
+			<field name="code">4</field>
+			<field name="name">Indisponibilidade de conexão Internet</field>
+			<field name="domain">REASON_TYPE_CODE</field>
+		</record>
+		<record id="l10n_cv_efatura.domain_43" model="l10n_cv_efatura.domain">
+			<field name="code">5</field>
+			<field name="name">Indisponibilidade do serviço de TimeStamp</field>
+			<field name="domain">REASON_TYPE_CODE</field>
+		</record>
+		<record id="l10n_cv_efatura.domain_44" model="l10n_cv_efatura.domain">
+			<field name="code">0</field>
+			<field name="name">Outro</field>
+			<field name="domain">REASON_TYPE_CODE</field>
+		</record>
+
+		<!-- Issue Reason Code -->
+		<record id="l10n_cv_efatura.domain_45" model="l10n_cv_efatura.domain">
+			<field name="code">2</field>
+			<field name="name">Art.º 65, n.º 2 CIVA</field>
+			<field name="domain">ISSUE_REASON_CODE</field>
+		</record>
+		<record id="l10n_cv_efatura.domain_46" model="l10n_cv_efatura.domain">
+			<field name="code">3</field>
+			<field name="name">Art.º 65, n.º 3 CIVA</field>
+			<field name="domain">ISSUE_REASON_CODE</field>
+		</record>
+		<record id="l10n_cv_efatura.domain_47" model="l10n_cv_efatura.domain">
+			<field name="code">4</field>
+			<field name="name">Art.º 65, n.º 4 CIVA</field>
+			<field name="domain">ISSUE_REASON_CODE</field>
+		</record>
+		<record id="l10n_cv_efatura.domain_48" model="l10n_cv_efatura.domain">
+			<field name="code">6</field>
+			<field name="name">Art.º 65, n.º 6 CIVA</field>
+			<field name="domain">ISSUE_REASON_CODE</field>
+		</record>
+		<record id="l10n_cv_efatura.domain_49" model="l10n_cv_efatura.domain">
+			<field name="code">7</field>
+			<field name="name">Art.º 65, n.º 7 CIVA</field>
+			<field name="domain">ISSUE_REASON_CODE</field>
+		</record>
+		<record id="l10n_cv_efatura.domain_50" model="l10n_cv_efatura.domain">
+			<field name="code">8</field>
+			<field name="name">Art.º 65, n.º 8 CIVA</field>
+			<field name="domain">ISSUE_REASON_CODE</field>
+		</record>
+		<record id="l10n_cv_efatura.domain_51" model="l10n_cv_efatura.domain">
+			<field name="code">9</field>
+			<field name="name">Art.º 65, n.º 9 CIVA</field>
+			<field name="domain">ISSUE_REASON_CODE</field>
+		</record>
+
+		<!-- Receipt Type Code -->
+		<record id="l10n_cv_efatura.domain_52" model="l10n_cv_efatura.domain">
+			<field name="code">1</field>
+			<field name="name">Comercial</field>
+			<field name="domain">RECEIPT_TYPE_CODE</field>
+		</record>
+		<record id="l10n_cv_efatura.domain_53" model="l10n_cv_efatura.domain">
+			<field name="code">2</field>
+			<field name="name">Serviço</field>
+			<field name="domain">RECEIPT_TYPE_CODE</field>
+		</record>
+		<record id="l10n_cv_efatura.domain_54" model="l10n_cv_efatura.domain">
+			<field name="code">3</field>
+			<field name="name">Comercial e Serviço</field>
+			<field name="domain">RECEIPT_TYPE_CODE</field>
+		</record>
+		<record id="l10n_cv_efatura.domain_55" model="l10n_cv_efatura.domain">
+			<field name="code">4</field>
+			<field name="name">Renda</field>
+			<field name="domain">RECEIPT_TYPE_CODE</field>
+		</record>
+
+		<!-- Schedule cron task  -->
+		<record id="ir_cron_send_invoices" model="ir.cron">
+			<field name="name">Invoices: Send to e-Factura Middleware</field>
+			<field name="type">ir.actions.server</field>
+			<field name="model_id" ref="model_res_company"/>
+			<field name="interval_number">20</field>
+			<field name="interval_type">minutes</field>
+			<field name="numbercall">-1</field>
+			<field name="doall" eval="False"/>
+			<field name="state">code</field>
+			<field name="code">model.run_send_invoice()</field>
+		</record>
+
+	</data>
+</odoo>

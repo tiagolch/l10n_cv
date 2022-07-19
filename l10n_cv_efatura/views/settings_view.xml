@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="2"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('settings')]" position="inside">
+                <div class="app_settings_block" data-string="e-Fatura" string="e-Fatura" data-key="l10n_cv_efatura">
+                    <h2>Middleware Core &amp; Plataforma Eletrónica</h2>
+                    <div class="row mt16 o_settings_container">
+
+                        <div class="col-12 col-lg-6 o_setting_box" title="">
+                            <div class="o_setting_left_pane"/>
+                            <div class="o_setting_right_pane">
+                                <span class="o_form_label">Base URL &amp; Transmitter Key</span>
+                                <div class="text-muted">
+                                    URL base dos endpoints &amp; Chave de Autorização do Transmissor dos DFE's
+                                </div>
+                                <div class="content-group">
+                                    <div class="row mt16">
+                                        <label for="middleware_base_endpoint" string="Base URL" class="col-lg-4 o_light_label"/>
+                                        <field name="middleware_base_endpoint" placeholder="ex: https://localhost:3443"/>
+                                    </div>
+                                    <div class="row">
+                                        <label for="transmitter_key" string="Transmitter Key" class="col-lg-4 o_light_label"/>
+                                        <field name="transmitter_key"/>
+                                        <button type="object" name="action_transmitter_key" class="btn-link mb4 fa fa-refresh" string="" title="Transmitter Key"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-lg-6 o_setting_box" title="Repositório">
+                            <div class="o_setting_left_pane"/>
+                            <div class="o_setting_right_pane">
+                                <span class="o_form_label">Repositório</span>
+                                <div class="text-muted">
+                                    Identificação do Repositório de Armazenamento na Base de Dados
+                                </div>
+                                <div class="content-group">
+                                    <div class="row mt16">
+                                        <field name="repository_code" style="margin-left:15px;"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-lg-6 o_setting_box" title="Software Transmissor dos DFE's">
+                            <div class="o_setting_left_pane"/>
+                            <div class="o_setting_right_pane">
+                                <span class="o_form_label">Software Transmissor</span>
+                                <div class="text-muted">
+                                    Dados do Software Transmissor reconhecidos pelo SFECV
+                                </div>
+                                <div class="content-group">
+                                    <div class="row mt16">
+                                        <label for="software_name" string="Nome" class="col-lg-4 o_light_label"/>
+                                        <field name="software_name"/>
+                                    </div>
+                                    <div class="row">
+                                        <label for="software_code" string="Código" class="col-lg-4 o_light_label"/>
+                                        <field name="software_code"/>
+                                    </div>
+                                    <div class="row">
+                                        <label for="transmitter_tax_id" string="TaxId" class="col-lg-4 o_light_label"/>
+                                        <field name="transmitter_tax_id"/>
+                                    </div>
+                                    <div class="row">
+                                        <label for="software_version" string="Versão" class="col-lg-4 o_light_label"/>
+                                        <field name="software_version"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_efatura_cv_settings" model="ir.actions.act_window">
+         <field name="name">Settings</field>
+         <field name="type">ir.actions.act_window</field>
+         <field name="res_model">res.config.settings</field>
+         <field name="view_id" ref="l10n_cv_efatura.res_config_settings_view_form" />
+         <field name="view_mode">form</field>
+         <field name="target">inline</field>
+         <field name="context">{'module': 'l10n_cv_efatura'}</field>
+     </record>
+
+</odoo>

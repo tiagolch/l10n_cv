@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="view_invoice_tree" model="ir.ui.view">
+        <field name="name">l10n_cv_efatura_account.move.tree.inherit</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_invoice_tree"/>
+        <field name="arch" type="xml">
+            <field name="move_type" position="after">
+                <field name="l10n_cv_efatura_document_type" optional="show"/>
+                <field name="l10n_cv_efatura_iud" optional="hide"/>
+                <field name="l10n_cv_efatura_pe_accepted" string="Enviado PE/DNRE" readonly="1"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- View Search inheritance -->
+    <record id="view_account_invoice_filter_inherit" model="ir.ui.view">
+        <field name="name">account.invoice.select.inherited</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_account_invoice_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="l10n_cv_efatura_iud"/>
+            </xpath>
+            <xpath expr="//filter[@name='late']" position="after">
+                <separator/>
+                <filter string="Enviado PE/DNRE" name="pe_accepted" domain="[('l10n_cv_efatura_pe_accepted', '=', True)]"/>
+                <filter string="Não Enviado PE/DNRE" name="pe_not_accepted" domain="[('l10n_cv_efatura_pe_accepted', '=', False)]"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="l10n_cv_efatura_account_move" model="ir.ui.view">
+        <field name="name">l10n_cv_efatura_account.move.inherit</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet" position="before">
+                <div class="alert alert-info" role="alert"
+                     attrs="{'invisible':['|','|','|','|',('l10n_cv_efatura_pe_accepted','=',True),('state','not in',['posted']),('move_type', 'not in', ['out_invoice','out_refund']),('l10n_cv_efatura_is_einvoice','=',False),('l10n_cv_efatura_cron_count','!=',5)]}">
+                    <strong>O Documento Fiscal Eletrónico (DFE) será enviado de forma assíncrona para a Plataforma Eletrónica (PE) da DNRE.</strong>
+                    <br/><button type="object" class="btn btn-link" name="action_document_send" string="Enviar agora" />
+                    <field name="l10n_cv_efatura_cron_count" invisible="1"/>
+                </div>
+            </xpath>
+            <!-- Cancel -->
+            <button name="button_draft" position="attributes">
+                <attribute name="attrs">{'invisible' : ['|','|', ('restrict_mode_hash_table', '=', True), ('state', 'not in', ('posted', 'cancel')),('l10n_cv_efatura_pe_accepted','=',True)]}
+                </attribute>
+            </button>
+            <button name="button_draft" position="after">
+                <button name="action_open_cancel_move_efatura" string="Cancelar DFE" type="object" class="btn btn-danger"
+                        groups="account.group_account_manager"
+                        attrs="{'invisible':['|','|',('state','!=','posted'), ('l10n_cv_efatura_pe_accepted','=',False),('l10n_cv_efatura_is_einvoice','=',False)]}"/>
+            </button>
+            <div class="oe_button_box" position="inside">
+                <button type="object" class="oe_stat_button" name="action_document_send" icon="fa-cloud-upload"
+                        attrs="{'invisible':['|','|','|',('l10n_cv_efatura_pe_accepted','=',True),('state','not in',['posted']),('move_type', 'not in', ['out_invoice','out_refund']),('l10n_cv_efatura_is_einvoice','=',False)]}">
+                    <div class="o_stat_info">
+                        <span class="o_stat_text" style="color: #7C7BAD;">Enviar Para</span>
+                        <span class="o_stat_text" style="color: #7C7BAD;">PE/DNRE</span>
+                    </div>
+                </button>
+                <button class="text-success"
+                        attrs="{'invisible':['|',('l10n_cv_efatura_pe_accepted','=',False),('l10n_cv_efatura_is_einvoice','=',False)]}">
+                    <i class="fa fa-fw o_button_icon fa-check" style="color: #28a745;"/>
+                    <div class="o_stat_info">
+                        <span class="o_stat_text">Aceitado pela</span>
+                        <span class="o_stat_text">PE/DNRE</span>
+                    </div>
+                </button>
+            </div>
+            <xpath expr="//div[@name='journal_div']" position="after">
+                <field name="l10n_cv_efatura_pe_accepted" invisible="True"/>
+            </xpath>
+
+            <xpath expr="//page[@id='other_tab']" position="after">
+                <page string="e-Fatura" attrs="{'invisible':[('state','!=', 'posted')]}">
+                    <group>
+                        <field name="l10n_cv_efatura_is_einvoice" attrs="{'readonly':[('l10n_cv_efatura_pe_accepted', '=', True)], 'invisible':['|', ('state','not in',['posted']),('move_type', 'not in', ['out_invoice','out_refund'])]}"/>
+                    </group>
+                   <group string="Dados do Documento Fiscal Eletrónico" name="invoice_extra_group" attrs="{'invisible':['|', ('state', 'in', ['draft', 'cancel']), ('l10n_cv_efatura_is_einvoice', '=', False)]}">
+                        <field name="l10n_cv_efatura_document_type" attrs="{'readonly':[('l10n_cv_efatura_pe_accepted', '=', True)], 'required':[('l10n_cv_efatura_is_einvoice', '=', True)]}"/>
+                        <field name="l10n_cv_efatura_issue_reason_code" attrs="{'readonly':[('l10n_cv_efatura_pe_accepted', '=', True)], 'invisible': [('move_type', 'not in', ['out_refund'])], 'required':[('move_type', '=', 'out_refund'), ('l10n_cv_efatura_is_einvoice', '=', True), ('state', '=', 'posted')]}"/>
+                        <field name="l10n_cv_efatura_repository_code" attrs="{'readonly':[('l10n_cv_efatura_pe_accepted', '=', True)], 'required':[('l10n_cv_efatura_is_einvoice', '=', True)]}"/>
+                        <field name="l10n_cv_efatura_document_number" invisible="1"/>
+                        <field name="l10n_cv_efatura_iud" attrs="{'required':[('l10n_cv_efatura_is_einvoice', '=', True), ('state', '=', 'posted')]}"/>
+                        <field name="l10n_cv_efatura_receipt_type_code" attrs="{'required':[('l10n_cv_efatura_document_type', '=', '4')], 'invisible':[('l10n_cv_efatura_document_type', '!=', '4')]}"/>
+                        <field name="l10n_cv_efatura_random_code" invisible="1"/>
+                        <field name="l10n_cv_efatura_xml" filename="l10n_cv_efatura_xml_filename" attrs="{'invisible':[('l10n_cv_efatura_xml', '=', False)], 'readonly':[('l10n_cv_efatura_pe_accepted', '=', True)]}"/>
+                        <field name="l10n_cv_efatura_xml_filename" invisible="1"/>
+                        <field name="l10n_cv_efatura_transmission_issue_mode" attrs="{'readonly':[('l10n_cv_efatura_pe_accepted', '=', True)], 'required':[('l10n_cv_efatura_is_einvoice', '=', True)]}"/>
+                        <field name="l10n_cv_efatura_reason_type_code" attrs="{'readonly':[('l10n_cv_efatura_pe_accepted', '=', True)], 'invisible': [('l10n_cv_efatura_transmission_issue_mode', '!=', '2')], 'required':[('l10n_cv_efatura_transmission_issue_mode', '=', '2')]}"/>
+                        <field name="l10n_cv_efatura_reason_description" attrs="{'readonly':[('l10n_cv_efatura_pe_accepted', '=', True)], 'invisible': [('l10n_cv_efatura_reason_type_code', '!=', '0')], 'required':[('l10n_cv_efatura_reason_type_code', '=', '0')]}"/>
+                    </group>
+                </page>
+            </xpath>
+
+            <xpath expr="//field[@name='amount_untaxed']" position="before">
+                <field name="l10n_cv_efatura_total_before_discount" attrs="{'invisible': [('l10n_cv_efatura_amount_discount', '=', 0)]}" />
+                <field name="l10n_cv_efatura_amount_discount" attrs="{'invisible': [('l10n_cv_efatura_amount_discount', '=', 0)]}"/>
+                <field name="l10n_cv_efatura_price_extension_total_amount" invisible="1"/>
+                <field name="l10n_cv_efatura_charge_total_amount" invisible="1"/>
+                <field name="l10n_cv_efatura_net_total" invisible="1"/>
+                <field name="l10n_cv_efatura_tax_total_amount" invisible="1"/>
+                <field name="l10n_cv_efatura_payable_amount" invisible="1"/>
+            </xpath>
+
+            <!-- Invoice Lines -->
+            <xpath expr="//field[@name='invoice_line_ids']//tree/field[@name='price_subtotal']" position="before">
+                <field name="l10n_cv_efatura_product_line_type" optional="hide"/>
+            </xpath>
+            <xpath expr="//field[@name='invoice_line_ids']//tree/field[@name='quantity']" position="after">
+                <field name="l10n_cv_efatura_unidade" optional="hide"/>
+            </xpath>
+
+        </field>
+
+    </record>
+
+</odoo>

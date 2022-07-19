@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="view_account_payment_form_inherit" model="ir.ui.view">
+            <field name="name">account.payment.form.inherit</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account.view_account_payment_form"/>
+            <field name="type">form</field>
+        <field name="arch" type="xml">
+
+            <button name="unmark_as_sent" position="after">
+                <button name="action_cancel_move_efatura" string="Cancelar DFE" type="object" class="btn btn-danger"
+                        groups="account.group_account_manager"
+                        attrs="{'invisible':['|','|',('state','!=','posted'), ('l10n_cv_efatura_pe_accepted','=',False),('l10n_cv_efatura_is_einvoice','=',False)]}"
+                        />
+            </button>
+
+            <div class="oe_button_box" position="inside">
+                <button type="object" class="oe_stat_button" name="action_document_send" icon="fa-cloud-upload"
+                        attrs="{'invisible':['|','|',('l10n_cv_efatura_pe_accepted','=',True),('state','not in',['posted']),('l10n_cv_efatura_is_einvoice','=',False)]}">
+                    <div class="o_stat_info">
+                        <span class="o_stat_text" style="color: #7C7BAD;">Enviar Para</span>
+                        <span class="o_stat_text" style="color: #7C7BAD;">PE/DNRE</span>
+                    </div>
+                </button>
+                <button class="text-success"
+                        attrs="{'invisible':['|',('l10n_cv_efatura_pe_accepted','=',False),('l10n_cv_efatura_is_einvoice','=',False)]}">
+                    <i class="fa fa-fw o_button_icon fa-check" style="color: #28a745;"/>
+                    <div class="o_stat_info">
+                        <span class="o_stat_text">Aceitado pela</span>
+                        <span class="o_stat_text">PE/DNRE</span>
+                    </div>
+                </button>
+            </div>
+
+            <group name="group3" position="after">
+                <group string="Dados do Documento Fiscal Eletrónico" name="invoice_dfe_group" attrs="{'invisible':[('l10n_cv_efatura_is_einvoice', '=', False)]}">
+                    <field name="l10n_cv_efatura_is_einvoice" readonly="True" invisible="True"/>
+                    <field name="l10n_cv_efatura_pe_accepted" invisible="True"/>
+                    <field name="l10n_cv_efatura_document_type" attrs="{'invisible':[('l10n_cv_efatura_document_type', '=', False)]}"/>
+                    <field name="l10n_cv_efatura_iud" attrs="{'invisible':[('l10n_cv_efatura_iud', '=', False)]}"/>
+                    <field name="l10n_cv_efatura_receipt_type_code" attrs="{'required':[('l10n_cv_efatura_document_type', '=', '4')], 'invisible':[('l10n_cv_efatura_document_type', '!=', '4')]}"/>
+                    <field name="l10n_cv_efatura_repository_code" attrs="{'invisible':[('l10n_cv_efatura_repository_code', '=', False)]}"/>
+                    <field name="l10n_cv_efatura_xml" filename="l10n_cv_efatura_xml_filename" attrs="{'invisible':[('l10n_cv_efatura_xml', '=', False)], 'readonly':[('l10n_cv_efatura_pe_accepted', '=', True)]}"/>
+                    <field name="l10n_cv_efatura_xml_filename" invisible="1"/>
+                    <field name="l10n_cv_efatura_transmission_issue_mode" attrs="{'readonly':[('l10n_cv_efatura_pe_accepted', '=', True)], 'required':[('l10n_cv_efatura_is_einvoice', '=', True)]}"/>
+                    <field name="l10n_cv_efatura_reason_type_code" attrs="{'readonly':[('l10n_cv_efatura_pe_accepted', '=', True)], 'invisible': [('l10n_cv_efatura_transmission_issue_mode', '!=', '2')], 'required':[('l10n_cv_efatura_transmission_issue_mode', '==', '2')]}"/>
+                    <field name="l10n_cv_efatura_reason_description" attrs="{'readonly':[('l10n_cv_efatura_pe_accepted', '=', True)], 'invisible': [('l10n_cv_efatura_reason_type_code', '!=', '0')], 'required':[('l10n_cv_efatura_reason_type_code', '==', '0')]}"/>
+                </group>
+            </group>
+
+        </field>
+
+    </record>
+
+    <record id="view_account_payment_tree_inherit" model="ir.ui.view">
+        <field name="name">account.payment.tree.inherit</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_tree"/>
+        <field name="arch" type="xml">
+            <field name="state" position="after">
+                <field name="l10n_cv_efatura_document_type" optional="show"/>
+                <field name="l10n_cv_efatura_iud" optional="hide"/>
+                <field name="l10n_cv_efatura_pe_accepted" string="Enviado PE/DNRE" readonly="1"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_account_payment_search_inherit" model="ir.ui.view">
+        <field name="name">account.payment.search.inherit</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='date']" position="before">
+                <separator/>
+                <filter string="Enviado PE/DNRE" name="pe_accepted" domain="[('l10n_cv_efatura_pe_accepted', '=', True)]"/>
+                <filter string="Não Enviado PE/DNRE" name="pe_not_accepted" domain="[('l10n_cv_efatura_pe_accepted', '=', False)]"/>
+                <separator/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

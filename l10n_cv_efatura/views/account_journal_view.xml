@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record model="ir.ui.view" id="view_account_journal_form">
+		<field name="name">view_account_journal_form_inherit</field>
+		<field name="model">account.journal</field>
+		<field name="inherit_id" ref="account.view_account_journal_form"/>
+		<field name="arch" type="xml">
+			<xpath expr="//group/group[1]" position="after">
+                <group string="Fatura Eletrónica - Cabo Verde" attrs="{'invisible':[('type','not in',['sale'])]}" name="invoice_extra_group">
+                    <field name="l10n_cv_efatura_document_type"/>
+                </group>
+            </xpath>
+		</field>
+	</record>
+
+</odoo>

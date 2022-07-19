@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+	<record id="view_l10n_cv_efatura_domain_tree" model="ir.ui.view">
+		<field name="name">Lista de Domínios</field>
+		<field name="model">l10n_cv_efatura.domain</field>
+		<field name="arch" type="xml">
+			<tree string="Lista de Domínios">
+				<field name="code"/>
+				<field name="name"/>
+				<field name="active_" widget="boolean_toggle"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="view_l10n_cv_efatura_domain_form" model="ir.ui.view">
+		<field name="name">Registar Novo Domínio</field>
+		<field name="model">l10n_cv_efatura.domain</field>
+		<field name="arch" type="xml">
+			<form string="Registar Novo Domínio">
+				<group>
+					<group>
+						<field name="code"/>
+						<field name="name"/>
+						<field name="active_" widget="boolean_toggle"/>
+						<field name="domain" invisible="1"/>
+					</group>
+				</group>
+			</form>
+		</field>
+	</record>
+
+	<record model="ir.actions.act_window" id="action_l10n_cv_efatura_document_type">
+		<field name="name">Tipo de Documento</field>
+		<field name="res_model">l10n_cv_efatura.domain</field>
+		<field name="view_mode">tree,form</field>
+		<field name="domain">[('domain', '=', 'DOCUMENT_TYPE')]</field>
+		<field name="context">{'default_domain': 'DOCUMENT_TYPE'}</field>
+	</record>
+
+	<record model="ir.actions.act_window" id="action_l10n_cv_efatura_repository">
+		<field name="name">Repositórios de Armazenamento</field>
+		<field name="res_model">l10n_cv_efatura.domain</field>
+		<field name="view_mode">tree,form</field>
+		<field name="domain">[('domain', '=', 'REPOSITORY')]</field>
+		<field name="context">{'default_domain': 'REPOSITORY'}</field>
+	</record>
+
+	<record model="ir.actions.act_window" id="action_l10n_cv_efatura_product_line_type">
+		<field name="name">Tipo de Linha Produto</field>
+		<field name="res_model">l10n_cv_efatura.domain</field>
+		<field name="view_mode">tree,form</field>
+		<field name="domain">[('domain', '=', 'PRODUCT_LINE_TYPE')]</field>
+		<field name="context">{'default_domain': 'PRODUCT_LINE_TYPE'}</field>
+	</record>
+
+	<record model="ir.actions.act_window" id="action_l10n_cv_efatura_event_type_code">
+		<field name="name">Código do Tipo de Evento</field>
+		<field name="res_model">l10n_cv_efatura.domain</field>
+		<field name="view_mode">tree,form</field>
+		<field name="domain">[('domain', '=', 'EVENT_TYPE_CODE')]</field>
+		<field name="context">{'default_domain': 'EVENT_TYPE_CODE'}</field>
+	</record>
+
+	<record model="ir.actions.act_window" id="action_l10n_cv_efatura_unidade">
+		<field name="name">Unidade</field>
+		<field name="res_model">l10n_cv_efatura.domain</field>
+		<field name="view_mode">tree,form</field>
+		<field name="domain">[('domain', '=', 'UNIDADE')]</field>
+		<field name="context">{'default_domain': 'UNIDADE'}</field>
+	</record>
+
+	<record model="ir.actions.act_window" id="action_l10n_cv_efatura_transmission_issue_mode">
+		<field name="name">Modo de Transmissão</field>
+		<field name="res_model">l10n_cv_efatura.domain</field>
+		<field name="view_mode">tree,form</field>
+		<field name="domain">[('domain', '=', 'TRANSMISSION_ISSUE_MODE')]</field>
+		<field name="context">{'default_domain': 'TRANSMISSION_ISSUE_MODE'}</field>
+	</record>
+
+	<record model="ir.actions.act_window" id="action_l10n_cv_efatura_reason_type_code">
+		<field name="name">Reason Type Code</field>
+		<field name="res_model">l10n_cv_efatura.domain</field>
+		<field name="view_mode">tree,form</field>
+		<field name="domain">[('domain', '=', 'REASON_TYPE_CODE')]</field>
+		<field name="context">{'default_domain': 'REASON_TYPE_CODE'}</field>
+	</record>
+
+	<record model="ir.actions.act_window" id="action_l10n_cv_efatura_issue_reason_code">
+		<field name="name">Issue Reason Code</field>
+		<field name="res_model">l10n_cv_efatura.domain</field>
+		<field name="view_mode">tree,form</field>
+		<field name="domain">[('domain', '=', 'ISSUE_REASON_CODE')]</field>
+		<field name="context">{'default_domain': 'ISSUE_REASON_CODE'}</field>
+	</record>
+
+	<record model="ir.actions.act_window" id="action_l10n_cv_efatura_receipt_type_code">
+		<field name="name">Tipo de Recibo</field>
+		<field name="res_model">l10n_cv_efatura.domain</field>
+		<field name="view_mode">tree,form</field>
+		<field name="domain">[('domain', '=', 'RECEIPT_TYPE_CODE')]</field>
+		<field name="context">{'default_domain': 'RECEIPT_TYPE_CODE'}</field>
+	</record>
+
+</odoo>

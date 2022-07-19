@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <template id="invoice_document_report_inherit" inherit_id="account.report_invoice_document">
+
+        <xpath expr="//p[@name='payment_communication']" position="before">
+            <div t-attf-class="#{'col-12' if report_type != 'html' else 'col-sm-12 col-md-12'}" t-if="o.l10n_cv_efatura_is_einvoice != False">
+                <div style="background-color:#FFF;text-align: center;margin-top: 20px;margin-bottom: 50px;">
+                    <t t-esc="o.generate_qr_code()"/>
+                    <img t-att-src="image_data_uri(o.l10n_cv_efatura_qr_code)" style="max-height: 150px;" alt="QR Code"/>
+                    <p><strong style="font-size: 12px;" t-field="o.l10n_cv_efatura_iud"/></p>
+                </div>
+            </div>
+        </xpath>
+
+        <xpath expr="//div[@id='qrcode']" position="attributes">
+            <attribute name="t-if">not o.l10n_cv_efatura_is_einvoice and o.display_qr_code</attribute>
+        </xpath>
+
+        <xpath expr="//div/h2/span[1]" position="attributes">
+            <attribute name="t-if">(o.move_type == 'out_invoice' and o.state == 'posted' and not o.l10n_cv_efatura_is_einvoice) or (o.move_type == 'out_invoice' and o.state == 'posted' and o.l10n_cv_efatura_is_einvoice and o.l10n_cv_efatura_document_type == '1')</attribute>
+        </xpath>
+
+        <xpath expr="//div/h2/span[@t-field='o.name']" position="before">
+            <span t-if="o.move_type == 'out_invoice' and o.state == 'posted' and o.l10n_cv_efatura_is_einvoice and o.l10n_cv_efatura_document_type == '2'">
+                Fatura-Recibo
+            </span>
+            <span t-if="o.move_type == 'out_invoice' and o.state == 'posted' and o.l10n_cv_efatura_is_einvoice and o.l10n_cv_efatura_document_type == '3'">
+                Talão de Venda
+            </span>
+        </xpath>
+
+        <xpath expr="//div[@name='reference']" position="after">
+            <div class="col-auto col-3 mw-100 mb-2" t-if="o.l10n_cv_efatura_is_einvoice" name="moeda">
+                <strong>Moeda:</strong>
+                <p class="m-0">CVE</p>
+            </div>
+        </xpath>
+
+        <xpath expr="//tr[@class='border-black o_subtotal']" position="before">
+            <tr class="border-black o_l10n_cv_efatura_amount_discount" style="" t-if="o.l10n_cv_efatura_amount_discount">
+                <td><strong>Total Descontos</strong></td>
+                <td class="text-right">
+                    <span t-field="o.l10n_cv_efatura_amount_discount"/>
+                </td>
+            </tr>
+            <tr style="" t-if="o.l10n_cv_efatura_charge_total_amount">
+                <td><strong>Total Encargos</strong></td>
+                <td class="text-right">
+                    <span t-field="o.l10n_cv_efatura_charge_total_amount"/>
+                </td>
+            </tr>
+        </xpath>
+
+        <xpath expr="//tr[@class='border-black o_subtotal']" position="attributes">
+            <attribute name="class"></attribute>
+        </xpath>
+
+    </template>
+</odoo>

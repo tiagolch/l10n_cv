@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <record id="view_account_move_wizard_form" model="ir.ui.view">
+        <field name="name">account.move.wizard.form</field>
+        <field name="model">account.move</field>
+        <field name="arch" type="xml">
+            <form string="Cancelar DFE">
+                <group>
+                    <field name="l10n_cv_efatura_document_type" readonly="1"/>
+                    <field name="name" readonly="1"/>
+                    <field name="l10n_cv_efatura_iud" readonly="1"/>
+                    <field name="l10n_cv_efatura_event_type_code" required="1" widget="radio"/>
+                    <field name="l10n_cv_efatura_cancel_reason" required="1"/>
+                </group>
+                <footer>
+                    <button name="action_cancel_move_efatura" type="object" string="Cancelar" class="btn-danger"/>
+                    <button string="Fechar" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

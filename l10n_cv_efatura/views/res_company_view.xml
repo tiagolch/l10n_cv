@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="view_form_company_inherited" model="ir.ui.view">
+            <field name="name">res.company.inherit</field>
+            <field name="model">res.company</field>
+            <field name="inherit_id" ref="base.view_company_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[1]" position="after">
+                    <page string="e-Fatura" groups="account.group_account_manager">
+                        <group>
+                            <group string="Enviar DFEs para PE/DNRE">
+                                <field name="l10n_cv_efatura_send_invoice" widget="boolean_toggle"/>
+                                <field name="l10n_cv_efatura_send_invoice_next_execution_date" attrs="{'invisible':[('l10n_cv_efatura_send_invoice', '=', False)]}"/>
+                            </group>
+                            <group string="Local de Emissão de DFEs" attrs="{'invisible':[('l10n_cv_efatura_send_invoice', '=', False)]}">
+                                <field name="l10n_cv_efatura_led_code" attrs="{'required':[('l10n_cv_efatura_send_invoice', '=', True)]}"/>
+                                <field name="l10n_cv_efatura_serie" attrs="{'required':[('l10n_cv_efatura_send_invoice', '=', True)]}"/>
+                                <field name="l10n_cv_efatura_address_code" attrs="{'required':[('l10n_cv_efatura_send_invoice', '=', True)]}"/>
+                                <field name="l10n_cv_efatura_address_detail" attrs="{'required':[('l10n_cv_efatura_send_invoice', '=', True)]}"/>
+                            </group>
+                            <group string="IAM Client" attrs="{'invisible':[('l10n_cv_efatura_send_invoice', '=', False)]}">
+                                <field name="l10n_cv_efatura_iam_client_id" attrs="{'required':[('l10n_cv_efatura_send_invoice', '=', True)]}"/>
+                                <field name="l10n_cv_efatura_iam_client_secret" attrs="{'required':[('l10n_cv_efatura_send_invoice', '=', True)]}"/>
+                            </group>
+                        </group>
+                    </page>
+                </xpath>
+
+                <xpath expr="//field[@name='phone']" position="attributes">
+                    <attribute name="attrs">{'required':[('l10n_cv_efatura_send_invoice', '=', True)]}</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='email']" position="attributes">
+                    <attribute name="attrs">{'required':[('l10n_cv_efatura_send_invoice', '=', True)]}</attribute>
+                </xpath>
+
+            </field>
+        </record>
+
+</odoo>
