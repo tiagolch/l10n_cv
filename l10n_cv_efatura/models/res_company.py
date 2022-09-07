@@ -4,6 +4,7 @@
 #    Copyright (C) 2022-TODAY IEKINY Marcel (<iekinyfernandes@gmail.com>).
 #
 ###############################################################################
+from builtins import print
 
 from odoo import models, fields, api, _
 from dateutil.relativedelta import relativedelta
@@ -31,8 +32,9 @@ class ResCompany(models.Model):
     l10n_cv_efatura_iam_client_secret = fields.Char(string="Client Secret",
                                                     help="Código de endereço em Cabo Verde com 6 níveis.")
 
+    # Send all DFE (Documento Fiscal Eletrónico) for each company
     @api.model
-    def run_send_invoice(self):
+    def action_send_dfe(self):
         records = self.search([('l10n_cv_efatura_send_invoice_next_execution_date', '!=', False),
                                ('l10n_cv_efatura_send_invoice_next_execution_date', '<=', fields.Datetime.now())])
         if records:
@@ -40,9 +42,10 @@ class ResCompany(models.Model):
             for record in records:
                 record.l10n_cv_efatura_send_invoice_next_execution_date = datetime.now() + relativedelta(minutes=+15)
                 to_update += record
-            to_update._send_invoices()
+            self.env.cr.commit()
+            to_update._send_dfe()
 
-    def _send_invoices(self):
+    def _send_dfe(self):
         for rec in self:
             if not rec.l10n_cv_efatura_send_invoice:
                 _logger.info('Enviar Faturas para PE/DNRE não está ativada.')
@@ -58,7 +61,7 @@ class ResCompany(models.Model):
                 _logger.info("Enviar para PE/DNRE cerca de %d DFE(s)." % len(invoices))
             for invoice in invoices:
                 try:
-                    invoice.action_document_send()
+                    invoice.action_send_dfe()
                     if invoice.l10n_cv_efatura_pe_accepted:
                         invoice.l10n_cv_efatura_cron_count = 0
                     else:
