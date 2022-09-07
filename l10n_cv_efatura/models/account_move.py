@@ -15,6 +15,7 @@ import requests
 import json
 import qrcode
 import logging
+import pytz
 from io import BytesIO
 
 MIDDLEWARE_BASE_ENDPOINT = 'https://localhost:3443'
@@ -297,28 +298,31 @@ class AccountMove(models.Model):
             'res_id': self.id,
         }
 
-    def action_document_send(self):
+    # Action send DFE (Documento Fiscai Eletrónico)
+    def action_send_dfe(self):
         for rec in self:
-            if rec.state == 'draft':
+            if rec.state == 'draft' or not rec.l10n_cv_efatura_is_einvoice or rec.l10n_cv_efatura_pe_accepted:
                 continue
-            rec._validate_electronic_invoice()
-            rec._validate_company_settings()
-            rec._validate_customer_settings()
-            rec._validate_software_transmissor_settings()
-            rec._generate_invoice_xml()
-            rec._send_document()
+            rec._validate_dfe()
+            rec._generate_dfe_xml()
+            rec._send_dfe()
 
 
     # Validation
-    def _validate_electronic_invoice(self):
+    def _validate_dfe(self):
         self.ensure_one()
+        self._validate_electronic_invoice()
+        self._validate_company_settings()
+        self._validate_customer_settings()
+        self._validate_software_transmissor_settings()
+
+    def _validate_electronic_invoice(self):
         if not self.l10n_cv_efatura_is_einvoice:
             raise UserError('Documento Fiscal Eletrónico (DFE) inválido.')
         if not self.l10n_cv_efatura_iud or len(self.l10n_cv_efatura_iud) != 45:
             raise UserError('Inválido IUD (Identificador Único de DFE). Favor verificar as configurações.')
 
     def _validate_company_settings(self):
-        self.ensure_one()
         if not self.company_id.l10n_cv_efatura_send_invoice:
             raise UserError(
                 'A empresa %s não está ativada para enviar Fatura Eletrónica. Favor verificar as configurações.' % self.company_id.name)
@@ -330,13 +334,11 @@ class AccountMove(models.Model):
                 'Client ID ou Client Secret não encontrado. Favor verificar as configurações da %s.' % self.company_id.name)
 
     def _validate_customer_settings(self):
-        self.ensure_one()
         if not self.partner_id.phone and not self.partner_id.mobile and not self.partner_id.email:
             raise UserError(
                 'O cliente %s deve ter pelo menos um dos contatos (telefone, móvel, email) definido.' % self.partner_id.name)
 
     def _validate_software_transmissor_settings(self):
-        self.ensure_one()
         if not self.l10n_cv_efatura_software_code:
             raise UserError('Código do Software não encontrado. Favor verificar as configurações.')
         if not self.l10n_cv_efatura_transmitter_tax_id:
@@ -350,9 +352,8 @@ class AccountMove(models.Model):
 
 
     # Electronic Invoicing Middleware Integration
-    #
     # Envia o Documento Fiscal Eletrónico (DFE) para a Plataforma Eletrónica (PE)
-    def _send_document(self):
+    def _send_dfe(self):
         self.ensure_one()
         url = self.env['ir.config_parameter'].sudo().get_param('l10n_cv_efatura.middleware_base_endpoint')
         url = url + '/v1/dfe' if url else MIDDLEWARE_BASE_ENDPOINT + '/v1/dfe'
@@ -381,19 +382,26 @@ class AccountMove(models.Model):
                     raise UserError('Ocorreu um erro. Favor tentar novamente! Se o erro persistir contatar o Administrador.')
                 for response in data['responses']:
                     if response['succeeded']:
-                        self.l10n_cv_efatura_pe_accepted = True
-                        self._set_payment_as_electronic_invoice()
                         msg = 'O Documento Fiscal Eletrónico (DFE) foi criado e enviado com sucesso para Plataforma Eletrónica da DNRE (IUD: {}).'.format(
                             self.l10n_cv_efatura_iud)
-                        xml_decoded = base64.b64decode(self.l10n_cv_efatura_xml).decode('utf-8')
-                        attachments = [(self.l10n_cv_efatura_xml_filename, xml_decoded)]
-                        self.message_post(body=msg, attachments=attachments)
+                        self._accept_dfe(msg)
                         break
+                    elif response['messages'][0]['code'] == 'IUD-UK1':
+                        msg = 'O Documento Fiscal Eletrónico (DFE) já existe na Plataforma Eletrónica da DNRE (IUD: {}).'.format(
+                            self.l10n_cv_efatura_iud)
+                        self._accept_dfe(msg)
                     else:
                         raise UserError(
                             '(' + response['messages'][0]['code'] + ') ' + response['messages'][0]['description'])
             else:
                 raise UserError('(HTTP ERROR {}) {}'.format(r.status_code, r.text))
+
+    def _accept_dfe(self, log_msg):
+        self.l10n_cv_efatura_pe_accepted = True
+        self._set_payment_as_electronic_invoice()
+        xml_decoded = base64.b64decode(self.l10n_cv_efatura_xml).decode('utf-8')
+        attachments = [(self.l10n_cv_efatura_xml_filename, xml_decoded)]
+        self.message_post(body=log_msg, attachments=attachments)
 
     # Cancelar Documento Fiscal Eletrónico (DFE)
     def _send_event(self):
@@ -438,7 +446,7 @@ class AccountMove(models.Model):
 
 
     # Generate DFE XML
-    def _generate_invoice_xml(self):
+    def _generate_dfe_xml(self):
         self.ensure_one()
         # Dfe is the root element
         dfe = ET.Element('Dfe', xmlns='urn:cv:efatura:xsd:v1.0', Version='1.0', Id=self.l10n_cv_efatura_iud,
@@ -524,18 +532,18 @@ class AccountMove(models.Model):
         ET.SubElement(invoice, 'Serie').text = self.company_id.l10n_cv_efatura_serie
         ET.SubElement(invoice, 'DocumentNumber').text = str(int(self.l10n_cv_efatura_document_number))
         ET.SubElement(invoice, 'IssueDate').text = str(self.date)
-
-        current_date_time = fields.Datetime.context_timestamp(self, datetime.now())
-        if not self.l10n_cv_efatura_issue_time:
-            self.l10n_cv_efatura_issue_time = fields.datetime.now()
-        aux = datetime.strptime(current_date_time.strftime('%Y-%m-%d %H:%M:%S'), '%Y-%m-%d %H:%M:%S') # Remove Timezone
+        current_date_time = self._currentDateTimeByTimezone()
+        self.l10n_cv_efatura_issue_time = self.l10n_cv_efatura_issue_time or current_date_time
+        aux = datetime.strptime(current_date_time.strftime('%Y-%m-%d %H:%M:%S'), '%Y-%m-%d %H:%M:%S')
         diff = aux - self.l10n_cv_efatura_issue_time
         diff_in_hours = diff.total_seconds() / 3600
         if diff_in_hours > 1:
             ET.SubElement(invoice, 'IssueTime').text = self.l10n_cv_efatura_issue_time.strftime("%H:%M:%S")
+            # Set transmission issue mode to offline and its default reason type code
+            self.l10n_cv_efatura_transmission_issue_mode = '2'
+            self.l10n_cv_efatura_reason_type_code = self.l10n_cv_efatura_reason_type_code or '1'
         else:
             ET.SubElement(invoice, 'IssueTime').text = current_date_time.time().strftime("%H:%M:%S")
-
         if self.invoice_date_due and self.l10n_cv_efatura_document_type == '1':
             ET.SubElement(invoice, 'DueDate').text = str(self.invoice_date_due)
         if self.l10n_cv_efatura_document_type in ['1', '2']:
@@ -609,7 +617,7 @@ class AccountMove(models.Model):
                 elif 'IR' in move_line.tax_ids.name:
                     line_tax.set('TaxTypeCode', "IR")
                 else:
-                    line_tax.set('TaxTypeCode', "IVA") #
+                    line_tax.set('TaxTypeCode', "IVA")
                 ET.SubElement(line_tax, 'TaxPercentage').text = AccountMove.format_number(move_line.tax_ids.amount)
             else:
                 line_tax.set('TaxTypeCode', "NA")
@@ -709,6 +717,12 @@ class AccountMove(models.Model):
         qr_code.make_image().save(temp, format="PNG")
         self.l10n_cv_efatura_qr_code = base64.b64encode(temp.getvalue())
 
+    def _currentDateTimeByTimezone(self):
+        current_date_time = fields.Datetime.context_timestamp(self, datetime.now())
+        user_tz = pytz.timezone(self.env.context.get('tz') or self.env.user.tz or 'Atlantic/Cape_Verde')
+        current_date_time = current_date_time.replace(tzinfo=pytz.utc).astimezone(user_tz)
+        return current_date_time
+
     # Luhn Algorithm - Check Digit
     def check_luhn(n):
         r = [int(ch) for ch in str(n)]
@@ -725,7 +739,9 @@ class AccountMove(models.Model):
             return '{:d}'.format(int(n))
         result = '{:.2f}'.format(n)
         if result[-1] == '0':
-            return result.rstrip(result[-1])
+            result = result.rstrip(result[-1])
+            if result[-1] == '.':
+                result = result.rstrip(result[-1])
         return result
 
     def exclude_tax(price, tax_ids):

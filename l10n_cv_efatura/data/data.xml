@@ -302,7 +302,7 @@
 			<field name="numbercall">-1</field>
 			<field name="doall" eval="False"/>
 			<field name="state">code</field>
-			<field name="code">model.run_send_invoice()</field>
+			<field name="code">model.action_send_dfe()</field>
 		</record>
 
 	</data>

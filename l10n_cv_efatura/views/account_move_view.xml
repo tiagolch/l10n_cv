@@ -41,7 +41,7 @@
                 <div class="alert alert-info" role="alert"
                      attrs="{'invisible':['|','|','|','|',('l10n_cv_efatura_pe_accepted','=',True),('state','not in',['posted']),('move_type', 'not in', ['out_invoice','out_refund']),('l10n_cv_efatura_is_einvoice','=',False),('l10n_cv_efatura_cron_count','!=',5)]}">
                     <strong>O Documento Fiscal Eletrónico (DFE) será enviado de forma assíncrona para a Plataforma Eletrónica (PE) da DNRE.</strong>
-                    <br/><button type="object" class="btn btn-link" name="action_document_send" string="Enviar agora" />
+                    <br/><button type="object" class="btn btn-link" name="action_send_dfe" string="Enviar agora" />
                     <field name="l10n_cv_efatura_cron_count" invisible="1"/>
                 </div>
             </xpath>
@@ -56,7 +56,7 @@
                         attrs="{'invisible':['|','|',('state','!=','posted'), ('l10n_cv_efatura_pe_accepted','=',False),('l10n_cv_efatura_is_einvoice','=',False)]}"/>
             </button>
             <div class="oe_button_box" position="inside">
-                <button type="object" class="oe_stat_button" name="action_document_send" icon="fa-cloud-upload"
+                <button type="object" class="oe_stat_button" name="action_send_dfe" icon="fa-cloud-upload"
                         attrs="{'invisible':['|','|','|',('l10n_cv_efatura_pe_accepted','=',True),('state','not in',['posted']),('move_type', 'not in', ['out_invoice','out_refund']),('l10n_cv_efatura_is_einvoice','=',False)]}">
                     <div class="o_stat_info">
                         <span class="o_stat_text" style="color: #7C7BAD;">Enviar Para</span>
@@ -118,6 +118,16 @@
 
         </field>
 
+    </record>
+
+
+    <record id="action_send_bulk_dfe" model="ir.actions.server">
+        <field name="name">Enviar PE/DNRE</field>
+        <field name="type">ir.actions.server</field>
+        <field name="model_id" ref="model_account_move"/>
+        <field name="binding_model_id" ref="model_account_move"/>
+        <field name="state">code</field>
+        <field name="code">records.action_send_dfe()</field>
     </record>
 
 </odoo>
